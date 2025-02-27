@@ -1,10 +1,19 @@
-import pytest
+from typing import Any
 
-from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
+import pytest
 
 
 @pytest.fixture
-def transactions():
+def operations_info() -> list[Any]:
+    return [
+        {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
+        {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
+        {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
+        {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
+    ]
+
+
+def transactions_info():
     return [
         {
             "id": 939719570,
@@ -51,41 +60,4 @@ def transactions():
             "from": "Visa Platinum 1246377376343588",
             "to": "Счет 14211924144426031657",
         },
-    ]
-
-
-@pytest.mark.parametrize("currency, expected", [("USD", 3), ("RUB", 2), ("X", 0)])
-def test_filter_by_currency(transactions, currency, expected):
-    assert len(list(filter_by_currency(transactions, currency))) == expected
-
-
-def test_filter_by_currency_empty():
-    assert len(list(filter_by_currency([], "X"))) == 0
-
-
-def test_transaction_descriptions(transactions):
-    assert list(transaction_descriptions(transactions)) == [
-        "Перевод организации",
-        "Перевод со счета на счет",
-        "Перевод со счета на счет",
-        "Перевод с карты на карту",
-        "Перевод организации",
-    ]
-
-
-def test_transaction_descriptions_empty():
-    assert list(transaction_descriptions([])) == []
-
-
-def test_card_number_generator():
-    assert list(card_number_generator(3, 5)) == [
-        "0000 0000 0000 0003",
-        "0000 0000 0000 0004",
-        "0000 0000 0000 0005",
-    ]
-
-
-def test_card_number_generator_edge():
-    assert list(card_number_generator(5, 5)) == [
-        "0000 0000 0000 0005",
     ]

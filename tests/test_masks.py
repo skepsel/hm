@@ -1,25 +1,29 @@
 import pytest
 
-from src.masks import get_mask_account
+from src import masks
 
 
-@pytest.fixture
-def card_number() -> str:
+@pytest.mark.parametrize(
+    "numbers_info,expected",
+    [
+        ("1596837868705199", "1596 83** **** 5199"),
+        ("6831982476737658", "6831 98** **** 7658"),
+        ("897304958f7290kj", "Error"),
+        ("394075", "Error"),
+    ],
+)
+def test_mask_card_number(numbers_info, expected):
+    assert masks.get_mask_card_number(numbers_info) == expected
 
 
-    def card_number():
-        return "1234567890123456"
-
-
-def test_get_mask_card_number(card_number: str) -> None:
-
-
-    def test_get_mask_card_number(card_number):
-        assert test_get_mask_card_number(card_number) == "1234 56** **** 3456"
-
-
-def test_get_mask_account(card_number: str) -> None:
-
-
-    def test_get_mask_account(card_number):
-        assert test_get_mask_card_number(card_number) == "**3456"
+@pytest.mark.parametrize(
+    "numbers,expected",
+    [
+        ("73654108430135874305", "**4305"),
+        ("19861059860492865092", "**5092"),
+        ("saigq54298dfgjkh895h", "Error"),
+        ("23576908536", "Error"),
+    ],
+)
+def test_get_mask_account(numbers, expected):
+    assert masks.get_mask_account(numbers) == expected
