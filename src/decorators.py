@@ -19,10 +19,10 @@ def log(filename=""):
                     log_file.close()
             else:
                 if filename == "":
-                    return func.__name__ + " ok"
+                    return func.__name__ + " " + str(result)
                 else:
                     log_file = open(filename, "w")
-                    log_file.write(func.__name__ + " ok")
+                    log_file.write(func.__name__ + " " + str(result))
                     log_file.close()
             return ""
 
